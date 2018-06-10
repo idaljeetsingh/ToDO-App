@@ -14,11 +14,52 @@ class ToDoListViewController: UITableViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
+        if let items = defaults.array(forKey: "ToDoListArray") as? [String] {
+            itemArray = items
+            
+        }
     }
     
-    let itemArray = ["List 1", "List 2", "List 3"]
+    var itemArray = ["List 1", "List 2", "List 3"]
+    
+    let defaults = UserDefaults.standard
     
     ///////////////////////////////////////////////
+    
+    //MARK - Add New Items
+    
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        
+        
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add new item", message: "", preferredStyle: .alert)
+        
+        let action = UIAlertAction(title: "Add", style: .default) { (action) in
+            //
+            self.itemArray.append(textField.text!)
+            
+            self.defaults.set(self.itemArray, forKey: "ToDoListArray")
+            
+            self.tableView.reloadData()
+            
+            
+        }
+        self.tableView.reloadData()
+        
+        alert.addTextField { (alertTextField) in
+            alertTextField.placeholder = "Create a new ToDo"
+            textField = alertTextField
+            
+        }
+        alert.addAction(action)
+        
+        present(alert, animated: true, completion: nil )
+        
+        
+    }
+    
+    
     
     //MARK: - TableView Datasource Methods here
     
