@@ -9,20 +9,34 @@
 import UIKit
 
 class ToDoListViewController: UITableViewController {
+    
+    var itemArray = [ItemModel]()
+    
+    let defaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+
+        let newItem = ItemModel()
+        newItem.title = "List Item 1"
+        itemArray.append(newItem)
+
+        let newItem2 = ItemModel()
+        newItem2.title = "List Item 2"
+        itemArray.append(newItem2)
         
-        if let items = defaults.array(forKey: "ToDoListArray") as? [String] {
-            itemArray = items
-            
-        }
+        let newItem3 = ItemModel()
+        newItem3.title = "List Item 3"
+        itemArray.append(newItem3)
+        
+        
+//        if let items = defaults.array(forKey: "ToDoListArray") as? [String] {
+//            itemArray = items
+//        }
     }
     
-    var itemArray = ["List 1", "List 2", "List 3"]
-    
-    let defaults = UserDefaults.standard
+
     
     ///////////////////////////////////////////////
     
@@ -37,7 +51,11 @@ class ToDoListViewController: UITableViewController {
         
         let action = UIAlertAction(title: "Add", style: .default) { (action) in
             //
-            self.itemArray.append(textField.text!)
+            
+            let newItem = ItemModel()
+            newItem.title = textField.text!
+            
+            self.itemArray.append(newItem)
             
             self.defaults.set(self.itemArray, forKey: "ToDoListArray")
             
@@ -68,8 +86,9 @@ class ToDoListViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoListCell", for: indexPath)
         
-        cell.textLabel?.text = itemArray[indexPath.row]
-       return cell
+        cell.textLabel?.text = itemArray[indexPath.row].title
+        
+        return cell
     }
     
     
@@ -81,21 +100,15 @@ class ToDoListViewController: UITableViewController {
     //MARK: - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         //print(indexPath.row)
         
         if  tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-
             tableView.cellForRow(at: indexPath)?.accessoryType = .none
-            
-        }
-        else {
+        }else {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
         }
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    
-    
 }
-
